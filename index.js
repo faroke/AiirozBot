@@ -8,7 +8,7 @@ const PREFIX = "!";
 // On défini que lorsque la fonction "on" du bot est en mode "ready", soit, connecté, il doit faire un certain nombres d'oppération.
 bot.on("ready", funtion () {
 // Le bot doit changé le "jeu" affecté au bot (voir documentation)
-	bot.user.setGame("Aiiroz Bot | !help", "")
+	bot.user.setGame("Aiiroz Bot | !help", "https://github.com/faroke/Aiirozbot")
 
 // Etant donné que le bot à pour statue "ready", on indique dans la console qu'il est connecté.
 	console.log("Aiiroz Bot - Connected");
