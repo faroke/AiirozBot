@@ -75,3 +75,9 @@ bot.on("message", async function(mesage) {
 
 // La fonction login sert à s'identifié en tant que bot sur discord, un code d'identification (voir documentation)
 bot.login(token)
+
+
+/*Permission Module:
+if(!message.member.roles.some(r=>["Role"].includes(r.name)) )
+return message.reply("Sorry, you don't have permissions to use this!");
+*/
