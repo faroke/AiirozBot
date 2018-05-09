@@ -70,6 +70,16 @@ bot.on("message", async function(mesage) {
 				return message.reply("Qui dois-je ajouté?");
 			.addFriend(MyNewFriend)
 		break;
+		case "purge":
+			const deleteCount = parseInt(args[0], 10);
+    
+    			if(!deleteCount || deleteCount < 2 || deleteCount > 100)
+      				return message.reply("Il faut donné un nombre entre 2 et 100");
+    
+  			const fetched = await message.channel.fetchMessages({count: deleteCount});
+   			message.channel.bulkDelete(fetched)
+				.catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
+			
 		//Reponse par défaut si aucune des demandes commençant par "!" n'a de reponse prédéfini
 		default:	
 			// On indique donc que la commande est inconnu
