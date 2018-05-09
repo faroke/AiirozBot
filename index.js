@@ -80,6 +80,22 @@ bot.on("message", async function(mesage) {
    			message.channel.bulkDelete(fetched)
 				.catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
 			
+			
+			
+		case "Spotify":
+			if(!message.member.roles.some(r=>["ADMIN"].includes(r.name)) )
+				return message.reply("Pas la permission");
+			else:
+				return message.reply("https://discordapp.com/oauth2/authorize?client_id=303904389968560129&scope=bot&permissions=0");
+		break;
+		case "YoutubeMusic":
+			if(!message.member.roles.some(r=>["ADMIN"].includes(r.name)) )
+				return message.reply("Pas la permission");
+			else: 
+				return message.reply("https://discordapp.com/oauth2/authorize?client_id=235088799074484224&permissions=8&scope=bot&response_type=code&redirect_uri=https%3A%2F%2Frythmbot.co%2Fthanks");
+			
+			
+			
 		//Reponse par défaut si aucune des demandes commençant par "!" n'a de reponse prédéfini
 		default:	
 			// On indique donc que la commande est inconnu
