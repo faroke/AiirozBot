@@ -51,17 +51,23 @@ bot.on("message", async function(mesage) {
 		break;
 		case "comment":
 			var question = arg[1]
-			message.channel.reply("https://www.lmgtfy.com/?q=${question}");
+			if(!question)
+				return message.reply("Si t'as pas de question tais toi");
+			message.reply("https://www.lmgtfy.com/?q=${question}");
 			
 		break;
 		case "avatar":
 			var picture = arg[1]
+			if(!picture)
+				return message.reply("Ajoute un lien");
 			client.user.setAvatar(picture)
   			.then(user => console.log(`New avatar set!`))
   			.catch(console.error);
 		break;
 		case "BeFriend?":
 			var MyNewFriend = arg[1]
+			if (!MyNewFriend)
+				return message.reply("Qui dois-je ajouté?");
 			.addFriend(MyNewFriend)
 		break;
 		//Reponse par défaut si aucune des demandes commençant par "!" n'a de reponse prédéfini
