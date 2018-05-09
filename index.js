@@ -50,7 +50,16 @@ bot.on("message", async function(mesage) {
 			message.channel.reply("https://www.lmgtfy.com/?q=${question}");
 			
 		break;
-
+		case "avatar":
+			var picture = arg[1]
+			client.user.setAvatar(picture)
+  			.then(user => console.log(`New avatar set!`))
+  			.catch(console.error);
+		break;
+		case "BeFriend?":
+			var MyNewFriend = arg[1]
+			.addFriend(MyNewFriend)
+		break;
 		//Reponse par défaut si aucune des demandes commençant par "!" n'a de reponse prédéfini
 		default:	
 			// On indique donc que la commande est inconnu
