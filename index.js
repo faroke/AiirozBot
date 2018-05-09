@@ -40,7 +40,11 @@ bot.on("message", async function(mesage) {
 		break;
 		case "help":
 		var embed = new Discord.RichEmbed()
-			.addField("!hello", "Premier dialogue avec le bot")
+			.addField("!hello", "On discute un peu")
+			.addField("!comment + question", "Me poser une question")
+			.addField("!avatar + Lien Image", "Changer mon Avatar")
+			.addField("!BeFriend? + Pseudo", "J'ajoute qui tu veux en ami")
+	
 			.setColor("#FFFF00")
 			message.delete()
 			message.channel.sendEmbed(embed)
