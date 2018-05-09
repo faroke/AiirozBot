@@ -60,9 +60,17 @@ bot.on("message", async function(mesage) {
 			var picture = arg[1]
 			if(!picture)
 				return message.reply("Ajoute un lien");
-			client.user.setAvatar(picture)
-  			.then(user => console.log(`New avatar set!`))
-  			.catch(console.error);
+			else:
+				message.reply("Veux tu vraiment setup ce nouvelle avatar: (Oui/Non)")
+				message.reply({
+					files: [picture]
+				})
+				if (message.content === 'Oui') {
+					client.user.setAvatar(picture)
+					.then(user => console.log(`New avatar set!`))
+					.catch(console.error); 
+				}
+				
 		break;
 		case "BeFriend?":
 			var MyNewFriend = arg[1]
