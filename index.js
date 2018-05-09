@@ -9,6 +9,8 @@ const PREFIX = "!";
 bot.on("ready", funtion () {
 // Le bot doit changé le "jeu" affecté au bot (voir documentation)
 	bot.user.setGame("Aiiroz Bot | !help", "https://github.com/faroke/Aiirozbot")
+// Notre bot est concidéré comme un utilisateur, ainsi un peu définir quel est son status: "Online", "idle", "invisible" et "dnd"
+	bot.user.SetStatus("Online")
 
 // Etant donné que le bot à pour statue "ready", on indique dans la console qu'il est connecté.
 	console.log("Aiiroz Bot - Connected");
