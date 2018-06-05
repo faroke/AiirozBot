@@ -2,122 +2,156 @@
 const Discord = require("discord.js");
 // On dit que lorsque l'on utilise la constante bot, on appel la fonction Client.
 const bot = new Discord.Client();
-// On créer la constante PREFIX qui contient 
+const YoutubeDL = require('youtube-dl');
+const YTDL = require("ytdl-core");
+const erreurperm = "Erreur permission invalide"
+const erreurarg = "Erreur Argument"
 const PREFIX = "!";
 
-// On défini que lorsque la fonction "on" du bot est en mode "ready", soit, connecté, il doit faire un certain nombres d'oppération.
-bot.on("ready", funtion () {
-/*
+bot.on("ready", function () {
 // Le bot doit changé le "jeu" affecté au bot (voir documentation)
 	bot.user.setGame("Aiiroz Bot | !help", "https://github.com/faroke/Aiirozbot")
-// Notre bot est concidéré comme un utilisateur, ainsi un peu définir quel est son status: "Online", "idle", "invisible" et "dnd"
-	bot.user.SetStatus("Online")
-*/
-   client.user.setPresence({ game: { name: 'Aiiroz Bot | !help', 'https://github.com/faroke/Aiirozbot' }, status: 'Online' })
-  .then(console.log)
-  .catch(console.error);
-       
+
 // Etant donné que le bot à pour statue "ready", on indique dans la console qu'il est connecté.
 	console.log("Aiiroz Bot - Connected");
 // On demande le nombre d'utilisateurs qui ont accès au bot
 	console.log("Membres : " + bot.users.size)
 });
 
-// On appel la fonction guildMemberAdd qui gère les nouveaux membre sur le serveur.
-bot.on("guildMemberAdd", member () {
-	console.log(member_username + "joined the server")
-	var role = member.guild.roles.find('name', 'Membre'); // Le script cherche dans la liste de role un role qui porte le nom Membre.
-	member.addRole(role)//On défini le role trouver au nouvelle utilisateur
+
+bot.on('message', msg => {
+
+  if (msg.content === 'Ping') {
+    msg.reply('Pong :ping_pong: ');
+  }
+
+
 });
+bot.on('guildMemberAdd', member => {
+  member.createDM().then(channel => {
+    return channel.send('Bienvenue sur mon serveur ' + member.displayName)
+  }).catch(console.error)
+  // On pourrait catch l'erreur autrement ici (l'utilisateur a peut être désactivé les MP)
+})
 
-// On appel la fonction message pour définir les commandes commençant pas la constante PREFIX
-bot.on("message", async function(mesage) {
-	var args = message.content.substring(PREFIX.length).split (" ");
-	switch (args[0].toLowerCase()) {
-		case "hello":
-			message.channel.sendMessage("Bonjour, comment vas tu?");
-			return;
-		break;
-		case "help":
-		var embed = new Discord.RichEmbed()
-			.addField("!hello", "On discute un peu")
-			.addField("!comment + question", "Me poser une question")
-			.addField("!avatar + Lien Image", "Changer mon Avatar")
-			.addField("!BeFriend? + Pseudo", "J'ajoute qui tu veux en ami")
-	
-			.setColor("#FFFF00")
-			message.delete()
-			message.channel.sendEmbed(embed)
-		break;
-		case "comment":
-			var question = arg[1]
-			if(!question)
-				return message.reply("Si t'as pas de question tais toi");
-			message.reply("https://www.lmgtfy.com/?q=${question}");
-			
-		break;
-		case "avatar":
-			var picture = arg[1]
-			if(!picture)
-				return message.reply("Ajoute un lien");
-			else:
-				message.reply("Veux tu vraiment setup ce nouvelle avatar: (Oui/Non)")
-				message.reply({
-					files: [picture]
-				})
-				if (message.content === 'Oui') {
-					client.user.setAvatar(picture)
-					.then(user => console.log(`New avatar set!`))
-					.catch(console.error); 
-				}
-				
-		break;
-		case "BeFriend?":
-			var MyNewFriend = arg[1]
-			if (!MyNewFriend)
-				return message.reply("Qui dois-je ajouté?");
-			.addFriend(MyNewFriend)
-		break;
-		case "purge":
-			const deleteCount = parseInt(args[0], 10);
+
+bot.on("message", function(message) {
+    if (message.author.equals(bot.user)) return;
+
+    if (!message.content.startsWith(PREFIX)) return;
+
+    var args = message.content.substring(PREFIX.length).split (" ");
+
+    var args2 = message.content.split(" ").slice(1);
+
+    var suffix = args2.join(" ");
+
+    var reason = args.slice(1).join(" ");
+
+    var user = message.mentions.users.first();
     
-    			if(!deleteCount || deleteCount < 2 || deleteCount > 100)
-      				return message.reply("Il faut donné un nombre entre 2 et 100");
+    var guild = message.guild;
     
-  			const fetched = await message.channel.fetchMessages({count: deleteCount});
-   			message.channel.bulkDelete(fetched)
-				.catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
-			
-			
-			
-		case "Spotify":
-			if(!message.member.roles.some(r=>["ADMIN"].includes(r.name)) )
-				return message.reply("Pas la permission");
-			else:
-				return message.reply("https://discordapp.com/oauth2/authorize?client_id=303904389968560129&scope=bot&permissions=0");
-		break;
-		case "YoutubeMusic":
-			if(!message.member.roles.some(r=>["ADMIN"].includes(r.name)) )
-				return message.reply("Pas la permission");
-			else: 
-				return message.reply("https://discordapp.com/oauth2/authorize?client_id=235088799074484224&permissions=8&scope=bot&response_type=code&redirect_uri=https%3A%2F%2Frythmbot.co%2Fthanks");
-			
-			
-			
-		//Reponse par défaut si aucune des demandes commençant par "!" n'a de reponse prédéfini
-		default:	
-			// On indique donc que la commande est inconnu
-			message.channel.sendMessage("Commande invalide, try !help for more information")
-			// On suprime le précédent message, soit le message de l'utilisateur (le bot à besoin des droits de gestion du salon (voir documentation)
-			message.delete();
-	}
-});
-
-// La fonction login sert à s'identifié en tant que bot sur discord, un code d'identification (voir documentation)
-bot.login(token)
+    var member = message.member;
+    
+    var modlog = member.guild.channels.find("name", "mod-log")
 
 
-/*Permission Module:
-if(!message.member.roles.some(r=>["Role"].includes(r.name)) )
-return message.reply("Sorry, you don't have permissions to use this!");
+    switch (args[0].toLowerCase()) {
+            
+            case "help":
+            var embed = new Discord.RichEmbed()
+            .addField("!ban", "Cette commande permet de bannir un utilisateur ! Pour l'utiliser, faites !ban @(utilisateur)")
+                .addField("!kick", "Cette commande permet de kick un utilisateur ! Pour l'utiliser, faites !kick @(utilisateur)")
+                .addField("!ping ou Ping", "Joue au ping pong avec le chatbot")
+                .addField("!github", "Obtenir le code source de notre ChatBot")
+                .addField("!purge", "Supprimer un nombre de message à la suite ! Pour l'utiliser, faites !purge nombredemessage")
+                .setColor("#01A9DB")
+                .setAuthor(message.author.username, message.author.avatarURL)
+                .setDescription("Voici les commandes du bot !")
+                .setTimestamp()
+                message.delete()
+                message.channel.sendEmbed(embed);
+            break;
+        case "kick":
+            if(!message.member.hasPermission("KICK_MEMBERS")) return message.channel.sendMessage("Erreur, permission invalide");
+            if(!modlog) return message.reply("Je ne trouve pas de channel mod-log.");
+            if (message.mentions.users.size < 1) return message.reply("Erreur Argument")
+            message.guild.member(user).kick();
+
+            var embed = new Discord.RichEmbed()
+            .addField("Commande :", "KICK")
+            .addField("Utilisateur :", user.username)
+            .addField("Modérateur :", message.author.username)
+             .addField("Heure:", message.channel.createdAt)
+            .setColor("#01A9DB")
+            .setAuthor(message.author.username, message.author.avatarURL)
+            .setTimestamp()
+            member.guild.channels.find("name", "mod-log").sendEmbed(embed);
+            message.delete();
+            break;
+        case "ban":
+            if(!message.member.hasPermission("BAN_MEMBERS")) return message.channel.sendMessage("Erreur permission invalide");
+            if(!modlog) return message.reply("Je ne trouve pas de channel mod-log.");
+            if (message.mentions.users.size < 1) return message.reply("Erreur Argument")
+            message.guild.ban(user, 2);
+
+            var embed = new Discord.RichEmbed()
+            .addField("Commande :", "BAN")
+            .addField("Utilisateur :", user.username)
+            .addField("Modérateur :", message.author.username)
+             .addField("Heure:", message.channel.createdAt)
+            .setColor("#01A9DB")
+            .setAuthor(message.author.username, message.author.avatarURL)
+            .setTimestamp()
+            member.guild.channels.find("name", "mod-log").sendEmbed(embed);
+            message.delete();
+            break;
+      case "comment":
+      message.reply("https://www.lmgtfy.com/?q=" + args[1]);
+      break;
+      /*
+      case "avatar":
+      var newavatar = args[1]
+      bot.user.setAvatar("{0}", [newavatar])
+      break;
 */
+
+       case "github":
+       message.reply('Voici notre dépot Git: https://github.com/faroke/Aiirozbot');
+       message.delete();
+       break;
+       
+       case "ping":
+       message.reply('Pong ! :ping_pong: ');
+       break; 
+
+
+
+
+      case "purge":
+            if(!message.member.hasPermission("BAN_MEMBERS")) return message.channel.sendMessage("Erreur permission invalide");
+            if(!modlog) return message.reply("Je ne trouve pas de channel mod-log.");
+            if (!args[1]) return message.reply("Erreur Argument")
+            message.channel.bulkDelete(args[1])
+
+            var embed = new Discord.RichEmbed()
+            .addField("Commande :", "La purge annuel")
+            .addField("Nombre de message purgé:", args[1])
+            .addField("Modérateur :", message.author.username)
+             .addField("Heure:", message.channel.createdAt)
+            .setColor("#01A9DB")
+            .setAuthor(message.author.username, message.author.avatarURL)
+            .setTimestamp()
+            member.guild.channels.find("name", "mod-log").sendEmbed(embed);
+            message.delete();
+      break;
+      
+
+            
+            default:
+            message.channel.sendMessage("Commande invalide")
+    }
+});
+
+bot.login(TOKEN)
