@@ -2,8 +2,6 @@
 const Discord = require("discord.js");
 // On dit que lorsque l'on utilise la constante bot, on appel la fonction Client.
 const bot = new Discord.Client();
-const YoutubeDL = require('youtube-dl');
-const YTDL = require("ytdl-core");
 const erreurperm = "Erreur permission invalide"
 const erreurarg = "Erreur Argument"
 const PREFIX = "!";
