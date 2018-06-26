@@ -152,4 +152,4 @@ bot.on("message", function(message) {
     }
 });
 
-bot.login('NDE1ODcyMDYxNDA0MjE3MzU1.DfgNVg.CaosrIzxEiOtVBnSr7PPoqZiV0Y')
+bot.login(TOKEN)
